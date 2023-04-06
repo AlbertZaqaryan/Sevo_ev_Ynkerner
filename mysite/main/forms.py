@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from .models import SubCategory, Contact
 
 
 class NewUserForm(UserCreationForm):
@@ -16,3 +17,15 @@ class NewUserForm(UserCreationForm):
 		if commit:
 			user.save()
 		return user
+	
+
+class SubCategoryForm(forms.ModelForm):
+	class Meta:
+		model = SubCategory
+		fields = ['category', 'name', 'price', 'img']
+		
+
+class ContactForm(forms.ModelForm):
+	class Meta:
+		model = Contact
+		fields = ['name', 'email', 'subject', 'message']

@@ -24,12 +24,7 @@
 										<div class="product-overlay">
 											<div class="overlay-content">
                                                 {% if user.is_authenticated and user.is_staff %}
-                                                    <form method="post">
-                                                        {% csrf_token %}
-                                                        <input type="num" name="change_price" placeholder="Change price" id="">
-                                                        <button type="submit" name="id" value="{{ i.id }}">Change Price</button>
-                                                        
-                                                    </form>
+                                                    <a href="{% url 'prod' i.id %}"><button>Change</button></a>
                                                     <h2>${{ i.price }}</h2>
                                                     <p>{{ i.name }}</p>
                                                 {% else %}

@@ -1,27 +1,13 @@
 from django.shortcuts import render, redirect
-from .models import SliderActive, Category, SubCategory
+from .models import SliderActive, Category, SubCategory, Contact
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import AuthenticationForm
-from .forms import NewUserForm
+from .forms import NewUserForm, SubCategoryForm, ContactForm
 # Create your views here.
 
 
 def index(request):
-    usd = request.POST.get('USD')
-    dram = request.POST.get('DRAM')
-    rub = request.POST.get('RUB')
-    if request.method == 'POST':
-        new_price = request.POST.get('change_price')
-        item_id = request.POST.get('id')
-        try:
-            new_price = int(new_price)
-            item_id = int(item_id)
-            x = SubCategory.objects.get(id=item_id)
-            x.price = new_price
-            x.save()
-        except:
-            return redirect('index')
     slider_active = SliderActive.objects.all()[0]
     slider = SliderActive.objects.all()[1:]
     category_list = Category.objects.all()
@@ -82,3 +68,29 @@ def logout_request(request):
 	logout(request)
 	messages.info(request, "You have successfully logged out.") 
 	return redirect("index")
+
+def prod(request, id):
+	form = SubCategoryForm()
+	cat = SubCategory.objects.get(pk=id)
+	return render(request, 'main/prod.html', context={'form':form, 'cat':cat})
+
+
+def contact(request):
+	user_message = ''
+	if request.method == 'POST':
+		form = ContactForm(request.POST)
+		if form.is_valid():
+			Contact.objects.create(**form.cleaned_data)
+			form = ContactForm()
+			user_message = 'Good Job'
+			return redirect('contact')
+		else:
+			user_message = 'Invalid form'
+			
+	else:
+		form = ContactForm()
+		user_message = ''
+	return render(request, 'main/contact-us.html',context={
+		'form':form,
+		'user_message':user_message
+    })

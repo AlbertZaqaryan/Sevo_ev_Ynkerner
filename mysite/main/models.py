@@ -28,6 +28,7 @@ class Category(models.Model):
 
 class SubCategory(models.Model):
 
+
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='categ')
     name = models.CharField('SubCategory name', max_length=60)
     price = models.PositiveIntegerField('SubCategory price')
@@ -39,3 +40,14 @@ class SubCategory(models.Model):
     class Meta:
         verbose_name = 'SubCategory'
         verbose_name_plural = 'SubCategories'
+
+
+class Contact(models.Model):
+
+    name = models.CharField('Contact name', max_length=60)
+    email = models.EmailField('Contact email')
+    subject = models.CharField('Contact subject', max_length=100)
+    message = models.TextField('Contact message')
+
+    def __str__(self):
+        return self.name
